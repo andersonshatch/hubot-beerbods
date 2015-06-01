@@ -1,0 +1,28 @@
+{
+  "name": "hubot-beerbods",
+  "description": "A beerbods script for Hubot",
+  "version": "1.0.0",
+  "author": "Josh Anderson",
+  "license": "MIT",
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "beerbods",
+	"slack"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andersonshatch/hubot-beerbods.git"
+  },
+  "bugs": {
+    "url": "https://github.com/andersonshatch/hubot-beerbods/issues"
+  },
+  "dependencies": {
+    "cheerio": "0.19.0"
+  },
+  "main": "index.coffee",
+  "homepage": "https://github.com/andersonshatch/hubot-beerbods#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
