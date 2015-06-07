@@ -16,7 +16,7 @@
 cheerio = require "cheerio"
 
 module.exports = (robot) ->
-	robot.respond /(what'?s? this week'?s )?beerbods\??/i, (message) ->
+	robot.respond /(what('|’)?s? this week('|’)?s )?beerbods\??/i, (message) ->
 		url = "https://beerbods.co.uk"
 		message.http(url).get() (error, response, body) ->
 			if error
