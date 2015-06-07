@@ -28,6 +28,8 @@ module.exports = (robot) ->
 			text = "This week's beer is " + $('h3', div).eq(0).text() + " - #{url}" + $('a', div).eq(0).attr("href")
 			if robot.adapterName == "slack"
 				robot.emit "slack-attachment", {
+					username: "beerbods",
+					icon_emoji: ":beers:",
 					message: message,
 					attachments: [{
 						pretext: "This week's beer:",
