@@ -25,7 +25,9 @@ module.exports = (robot) ->
 				return
 			$ = cheerio.load body
 			div = $('div.beerofweek-container')
-			text = "This week's beer is " + $('h3', div).eq(0).text() + " - #{url}" + $('a', div).eq(0).attr("href")
+			beerDelta = 0
+			beerTitle = $('h3', div).eq(beerDelta).text()
+			text = "This week's beer is " + beerTitle + " - #{url}" + $('a', div).eq(beerDelta).attr("href")
 			if robot.adapterName == "slack"
 				robot.emit "slack-attachment", {
 					username: "beerbods",
@@ -33,10 +35,15 @@ module.exports = (robot) ->
 					message: message,
 					attachments: [{
 						pretext: "This week's beer:",
-						title: $('h3', div).eq(0).text(),
-						title_link: url + $('a', div).eq(0).attr("href"),
-						image_url: url + $('img', div).eq(0).attr("src"),
+						title: beerTitle,
+						title_link: url + $('a', div).eq(beerDelta).attr("href"),
+						image_url: url + $('img', div).eq(beerDelta).attr("src"),
 						fallback: text
+						fields: [{
+							title: "Untappd",
+							value: "<https://untappd.com/search?q=" + encodeURIComponent(beerTitle) + "|Search on Untappd>"
+							short: true
+						}]
 					}]
 				}
 			else
