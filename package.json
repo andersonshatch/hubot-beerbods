@@ -1,13 +1,14 @@
 {
   "name": "hubot-beerbods",
   "description": "A beerbods script for Hubot",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Josh Anderson",
   "license": "MIT",
   "keywords": [
     "hubot",
     "hubot-scripts",
     "beerbods",
+	"untappd",
 	"slack"
   ],
   "repository": {
