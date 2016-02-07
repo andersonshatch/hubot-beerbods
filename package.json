@@ -8,8 +8,8 @@
     "hubot",
     "hubot-scripts",
     "beerbods",
-	"untappd",
-	"slack"
+    "untappd",
+    "slack"
   ],
   "repository": {
     "type": "git",
