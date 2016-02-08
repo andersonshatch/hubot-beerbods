@@ -24,7 +24,9 @@
   "main": "index.coffee",
   "homepage": "https://github.com/andersonshatch/hubot-beerbods#readme",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register test"
+    "test": "npm run test-unit && npm run test-integration",
+    "test-integration": "mocha --compilers coffee:coffee-script/register test/hubot-beerbods-integration.coffee",
+    "test-unit": "mocha --compilers coffee:coffee-script/register test/hubot-beerbods-unit.coffee"
   },
   "devDependencies": {
     "chai": "^3.5.0",
