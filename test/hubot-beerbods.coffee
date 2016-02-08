@@ -49,3 +49,45 @@ describe 'hubot-beerbods', ->
 				response
 			]
 
+	context 'beerbods returns modified page layout', ->
+		beforeEach (done) ->
+			nock("https://beerbods.co.uk")
+				.get("/")
+				.replyWithFile(200, __dirname + '/replies/invalid.html')
+			@room.user.say 'josh', 'hubot beerbods'
+			setTimeout done, 100
+
+		it 'responds with an apology', ->
+			expect(@room.messages).to.eql [
+				['josh', 'hubot beerbods']
+				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
+			]
+
+	context 'beerbods site unavailable', ->
+		beforeEach (done) ->
+			nock("https://beerbods.co.uk")
+				.get("/")
+				.replyWithError('some http / socket error')
+			@room.user.say 'josh', 'hubot beerbods'
+			setTimeout done, 100
+
+		it 'responds with an apology', ->
+			expect(@room.messages).to.eql [
+				['josh', 'hubot beerbods']
+				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
+			]
+
+	context 'beerbods 404', ->
+		beforeEach (done) ->
+			nock("https://beerbods.co.uk")
+				.get("/")
+				.reply(404)
+			@room.user.say 'josh', 'hubot beerbods'
+			setTimeout done, 100
+
+		it 'responds with an apology', ->
+			expect(@room.messages).to.eql [
+				['josh', 'hubot beerbods']
+				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
+			]
+
