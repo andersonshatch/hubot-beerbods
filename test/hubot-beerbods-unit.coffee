@@ -4,12 +4,12 @@ nock = require 'nock'
 
 helper = new Helper('../src')
 
-describe 'hubot-beerbods', ->
+describe 'hubot-beerbods-unit', ->
 	beforeEach ->
 		@room = helper.createRoom(httpd: false)
 		do nock.disableNetConnect
 
-	context 'beerbods returns page with expected layout', ->
+	context 'mock beerbods returns page with expected layout', ->
 		beforeEach (done) ->
 			nock("https://beerbods.co.uk")
 				.get("/")
@@ -49,7 +49,7 @@ describe 'hubot-beerbods', ->
 				response
 			]
 
-	context 'beerbods returns modified page layout', ->
+	context 'mock beerbods returns modified page layout', ->
 		beforeEach (done) ->
 			nock("https://beerbods.co.uk")
 				.get("/")
@@ -63,7 +63,7 @@ describe 'hubot-beerbods', ->
 				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
 			]
 
-	context 'beerbods site unavailable', ->
+	context 'mock beerbods site unavailable', ->
 		beforeEach (done) ->
 			nock("https://beerbods.co.uk")
 				.get("/")
@@ -77,7 +77,7 @@ describe 'hubot-beerbods', ->
 				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
 			]
 
-	context 'beerbods 404', ->
+	context 'mock beerbods 404', ->
 		beforeEach (done) ->
 			nock("https://beerbods.co.uk")
 				.get("/")
