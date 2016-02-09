@@ -7,10 +7,9 @@ A [beerbods](https://beerbods.co.uk) script for [Hubot](https://hubot.github.com
 Joe: hubot beerbods
 Hubot: This week's beer is Little Beer Corporation, Little Wild - https://beerbods.co.uk/this-weeks-beer
 ```
-![Preview in irc/xmpp](./img/nonslack.png)
-
+![Preview in irc/xmpp](./img/nonslack.png?raw=true)
 If you're using slack, you'll be treated to a picture of the beer and a link to search for it on [Untappd](http://untappd.com).
-![Preview in Slack](./img/slack.png)
+![Preview in Slack](./img/slack.png?raw=true)
 
 
 ## Configuration
