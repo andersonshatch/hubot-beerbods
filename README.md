@@ -7,10 +7,14 @@ A [beerbods](https://beerbods.co.uk) script for [Hubot](https://hubot.github.com
 Joe: hubot beerbods
 Hubot: This week's beer is Little Beer Corporation, Little Wild - https://beerbods.co.uk/this-weeks-beer
 ```
+![Preview in irc/xmpp](./img/nonslack.png)
 
-If you're using slack, you'll be treated to a picture of the beer too.
+If you're using slack, you'll be treated to a picture of the beer and a link to search for it on [Untappd](http://untappd.com).
+![Preview in Slack](./img/slack.png)
+
 
 ## Configuration
 
 When used with Slack, the script will override the username of hubot to 'beerbods' and set the image to :beers:,
 this can be disabled (mainly useful for XMPP/IRC bridges) by setting environment variable: `HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY=true`
+
