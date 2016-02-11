@@ -15,11 +15,11 @@
 
 cheerio = require "cheerio"
 
-disableSlackIdentityChange = if process.env.HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY == "true" then true else false
 url = "https://beerbods.co.uk"
 
 module.exports = (robot) ->
 	robot.respond /(what('|’)?s? this week('|’)?s )?beerbods\??/i, (message) ->
+		disableSlackIdentityChange = if process.env.HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY == "true" then true else false
 		message.http(url).get() (error, response, body) ->
 			if error
 				respondWithError message
