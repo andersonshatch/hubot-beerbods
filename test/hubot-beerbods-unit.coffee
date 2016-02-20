@@ -4,17 +4,19 @@ nock = require 'nock'
 
 helper = new Helper('../src')
 
+beforeEach ->
+	GLOBAL.room = helper.createRoom(httpd: false)
+	do nock.disableNetConnect
+
 afterEach ->
 	GLOBAL.nockscope.done()
 
 describe 'hubot-beerbods-slack-unit', ->
 	beforeEach ->
-		@room = helper.createRoom(httpd: false)
-		@room.robot.adapterName = 'slack'
-		@room.robot.slackMessages = []
-		@room.robot.on 'slack-attachment', (data) ->
+		GLOBAL.room.robot.adapterName = 'slack'
+		GLOBAL.room.robot.slackMessages = []
+		GLOBAL.room.robot.on 'slack-attachment', (data) ->
 			data.message.robot.slackMessages.push data
-		do nock.disableNetConnect
 
 		@attachment = [{
 			pretext: 'This week\'s beer:',
@@ -34,16 +36,16 @@ describe 'hubot-beerbods-slack-unit', ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithFile(200, __dirname + '/replies/valid.html')
-			@room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
 			setTimeout done, 100
 
 		it 'doesn\'t reply with a normal message, sends slack attachment as beerbods', ->
-			expect(@room.messages).to.eql [
+			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
 			]
 
-			expect(@room.robot.slackMessages).to.have.length 1
-			message = @room.robot.slackMessages[0]
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			message = GLOBAL.room.robot.slackMessages[0]
 			expect(message.username).to.eql "beerbods"
 			expect(message.icon_emoji).to.eql ":beers:"
 			expect(message.attachments).to.eql @attachment
@@ -53,15 +55,15 @@ describe 'hubot-beerbods-slack-unit', ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithFile(200, __dirname + '/replies/invalid.html')
-			@room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
 			setTimeout done, 100
 
 		it 'replies with an apology via normal message', ->
-			expect(@room.messages).to.eql [
+			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
 				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
 			]
-			expect(@room.robot.slackMessages).to.have.length 0
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 0
 
 	context 'mock beerbods returns page with expected layout, slack custom identity disabled', ->
 		beforeEach (done) ->
@@ -69,46 +71,42 @@ describe 'hubot-beerbods-slack-unit', ->
 				.get("/")
 				.replyWithFile(200, __dirname + '/replies/valid.html')
 			process.env.HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY = 'true'
-			@room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
 			setTimeout done, 100
 
 		it 'doesn\'t reply with a normal message, sends slack attachment as hubot', ->
-			expect(@room.messages).to.eql [
+			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
 			]
 
-			expect(@room.robot.slackMessages).to.have.length 1
-			message = @room.robot.slackMessages[0]
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			message = GLOBAL.room.robot.slackMessages[0]
 			expect(message.username).to.be.undefined
 			expect(message.icon_imoji).to.be.undefined
 			expect(message.attachments).to.eql @attachment
 
 
 describe 'hubot-beerbods-unit', ->
-	beforeEach ->
-		@room = helper.createRoom(httpd: false)
-		do nock.disableNetConnect
-
 	context 'mock beerbods returns page with expected layout', ->
 		beforeEach (done) ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.times(9)
 				.replyWithFile(200, __dirname + '/replies/valid.html')
-			@room.user.say 'josh', 'hubot beerbods'
-			@room.user.say 'josh', 'hubot beerbods some other text'
-			@room.user.say 'josh', 'hubot whats this weeks beerbods '
-			@room.user.say 'josh', 'hubot whats this weeks beerbods?'
-			@room.user.say 'josh', 'hubot what\'s this weeks beerbods'
-			@room.user.say 'josh', 'hubot what\'s this weeks beerbods?'
-			@room.user.say 'josh', 'hubot what\'s this week\'s beerbods'
-			@room.user.say 'josh', 'hubot what\'s this week\'s beerbods?'
-			@room.user.say 'josh', 'hubot what’s this week’s beerbods?'
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot beerbods some other text'
+			GLOBAL.room.user.say 'josh', 'hubot whats this weeks beerbods '
+			GLOBAL.room.user.say 'josh', 'hubot whats this weeks beerbods?'
+			GLOBAL.room.user.say 'josh', 'hubot what\'s this weeks beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot what\'s this weeks beerbods?'
+			GLOBAL.room.user.say 'josh', 'hubot what\'s this week\'s beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot what\'s this week\'s beerbods?'
+			GLOBAL.room.user.say 'josh', 'hubot what’s this week’s beerbods?'
 			setTimeout done, 100
 
 		response = ['hubot', 'This week\'s beer is Beer?, The Dharma Initiative - https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative']
 		it 'responds to hubot beerbods', ->
-			expect(@room.messages).to.eql [
+			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
 				['josh', 'hubot beerbods some other text']
 				['josh', 'hubot whats this weeks beerbods ']
@@ -134,11 +132,11 @@ describe 'hubot-beerbods-unit', ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithFile(200, __dirname + '/replies/invalid.html')
-			@room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
 			setTimeout done, 100
 
 		it 'responds with an apology', ->
-			expect(@room.messages).to.eql [
+			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
 				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
 			]
@@ -148,11 +146,11 @@ describe 'hubot-beerbods-unit', ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithError('some http / socket error')
-			@room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
 			setTimeout done, 100
 
 		it 'responds with an apology', ->
-			expect(@room.messages).to.eql [
+			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
 				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
 			]
@@ -162,11 +160,11 @@ describe 'hubot-beerbods-unit', ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.reply(404)
-			@room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
 			setTimeout done, 100
 
 		it 'responds with an apology', ->
-			expect(@room.messages).to.eql [
+			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
 				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
 			]
