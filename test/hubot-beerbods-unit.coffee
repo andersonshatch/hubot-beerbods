@@ -4,6 +4,9 @@ nock = require 'nock'
 
 helper = new Helper('../src')
 
+afterEach ->
+	GLOBAL.nockscope.done()
+
 describe 'hubot-beerbods-slack-unit', ->
 	beforeEach ->
 		@room = helper.createRoom(httpd: false)
@@ -28,7 +31,7 @@ describe 'hubot-beerbods-slack-unit', ->
 
 	context 'mock beerbods returns page with expected layout', ->
 		beforeEach (done) ->
-			nock("https://beerbods.co.uk")
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithFile(200, __dirname + '/replies/valid.html')
 			@room.user.say 'josh', 'hubot beerbods'
@@ -47,7 +50,7 @@ describe 'hubot-beerbods-slack-unit', ->
 
 	context 'mock beerbods returns modified page layout', ->
 		beforeEach (done) ->
-			nock("https://beerbods.co.uk")
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithFile(200, __dirname + '/replies/invalid.html')
 			@room.user.say 'josh', 'hubot beerbods'
@@ -62,7 +65,7 @@ describe 'hubot-beerbods-slack-unit', ->
 
 	context 'mock beerbods returns page with expected layout, slack custom identity disabled', ->
 		beforeEach (done) ->
-			nock("https://beerbods.co.uk")
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithFile(200, __dirname + '/replies/valid.html')
 			process.env.HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY = 'true'
@@ -88,7 +91,7 @@ describe 'hubot-beerbods-unit', ->
 
 	context 'mock beerbods returns page with expected layout', ->
 		beforeEach (done) ->
-			nock("https://beerbods.co.uk")
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.times(9)
 				.replyWithFile(200, __dirname + '/replies/valid.html')
@@ -128,7 +131,7 @@ describe 'hubot-beerbods-unit', ->
 
 	context 'mock beerbods returns modified page layout', ->
 		beforeEach (done) ->
-			nock("https://beerbods.co.uk")
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithFile(200, __dirname + '/replies/invalid.html')
 			@room.user.say 'josh', 'hubot beerbods'
@@ -142,7 +145,7 @@ describe 'hubot-beerbods-unit', ->
 
 	context 'mock beerbods site unavailable', ->
 		beforeEach (done) ->
-			nock("https://beerbods.co.uk")
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.replyWithError('some http / socket error')
 			@room.user.say 'josh', 'hubot beerbods'
@@ -156,7 +159,7 @@ describe 'hubot-beerbods-unit', ->
 
 	context 'mock beerbods 404', ->
 		beforeEach (done) ->
-			nock("https://beerbods.co.uk")
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
 				.reply(404)
 			@room.user.say 'josh', 'hubot beerbods'
