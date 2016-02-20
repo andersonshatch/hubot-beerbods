@@ -11,12 +11,15 @@ beforeEach ->
 afterEach ->
 	GLOBAL.nockscope.done()
 
+configureRoomForSlack = ->
+	GLOBAL.room.robot.adapterName = 'slack'
+	GLOBAL.room.robot.slackMessages = []
+	GLOBAL.room.robot.on 'slack-attachment', (data) ->
+		data.message.robot.slackMessages.push data
+
 describe 'hubot-beerbods-slack-unit', ->
 	beforeEach ->
-		GLOBAL.room.robot.adapterName = 'slack'
-		GLOBAL.room.robot.slackMessages = []
-		GLOBAL.room.robot.on 'slack-attachment', (data) ->
-			data.message.robot.slackMessages.push data
+		do configureRoomForSlack
 
 		@attachment = [{
 			pretext: 'This week\'s beer:',
