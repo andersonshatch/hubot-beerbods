@@ -8,7 +8,8 @@ Joe: hubot beerbods
 Hubot: This week's beer is Little Beer Corporation, Little Wild - https://beerbods.co.uk/this-weeks-beer
 ```
 ![Preview in irc/xmpp](./img/nonslack.png?raw=true)
-If you're using slack, you'll be treated to a picture of the beer and a link to search for it on [Untappd](http://untappd.com).
+If you're using Slack, you'll be treated to a picture of the beer and a link to search for it on [Untappd](http://untappd.com).
+Providing Untappd API keys (with configuration shown below) will enable looking up more info about the beer from Untappd. (If more than one match is found for the Beerbods name on Untappd, the link to search will be sent instead)
 ![Preview in Slack](./img/slack.png?raw=true)
 
 
