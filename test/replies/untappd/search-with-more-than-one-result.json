@@ -1,0 +1,21 @@
+{
+    "response": {
+        "found": 2,
+        "beers": {
+            "count": 1,
+            "items": [
+                {
+                    "beer": {
+                        "bid": 481516
+                    }
+				},
+				{
+					"beer": {
+						"bid": 2342
+					}
+				}
+            ]
+        }
+    }
+}
+

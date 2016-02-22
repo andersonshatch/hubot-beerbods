@@ -1,0 +1,17 @@
+[
+   {
+      "pretext" : "This week's beer:",
+      "title" : "Beer?, The Dharma Initiative",
+      "title_link" : "https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative",
+      "fields" : [
+         {
+            "short" : true,
+            "title" : "Untappd",
+            "value" : "<https://untappd.com/search?q=Beer%3F%2C%20The%20Dharma%20Initiative|Search on Untappd>"
+         }
+      ],
+      "fallback" : "This week's beer is Beer?, The Dharma Initiative - https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative",
+      "image_url" : "https://beerbods.co.uk/media/108/bottle.png"
+   }
+]
+

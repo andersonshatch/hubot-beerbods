@@ -20,19 +20,7 @@ configureRoomForSlack = ->
 describe 'hubot-beerbods-slack-unit', ->
 	beforeEach ->
 		do configureRoomForSlack
-
-		@attachment = [{
-			pretext: 'This week\'s beer:',
-			title: 'Beer?, The Dharma Initiative',
-			title_link: 'https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative',
-			image_url: 'https://beerbods.co.uk/media/108/bottle.png',
-			fallback: 'This week\'s beer is Beer?, The Dharma Initiative - https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative',
-			fields: [{
-				title: 'Untappd',
-				value: '<https://untappd.com/search?q=Beer%3F%2C%20The%20Dharma%20Initiative|Search on Untappd>',
-				short: true
-			}]
-		}]
+		@attachment = require './expected/slack-attachment.json'
 
 	context 'mock beerbods returns page with expected layout', ->
 		beforeEach (done) ->
@@ -88,6 +76,88 @@ describe 'hubot-beerbods-slack-unit', ->
 			expect(message.icon_imoji).to.be.undefined
 			expect(message.attachments).to.eql @attachment
 
+describe 'hubot-beerbods-slack-untappd-unit', ->
+	beforeEach ->
+		process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_ID = 'not-real-id'
+		process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_SECRET = 'not-real-secret'
+		@untappdScope = nock("https://api.untappd.com")
+		@searchUrl = "/v4/search/beer?q=#{encodeURIComponent 'Beer?, The Dharma Initiative'}&limit=1&client_id=not-real-id&client_secret=not-real-secret"
+		@infoUrl = '/v4/beer/info/481516?compact=true&client_id=not-real-id&client_secret=not-real-secret'
+		GLOBAL.room.user.say 'josh', 'hubot beerbods'
+		GLOBAL.nockscope = nock("https://beerbods.co.uk")
+			.get("/")
+			.replyWithFile(200, __dirname + '/replies/valid.html')
+
+		do configureRoomForSlack
+
+	afterEach ->
+		@untappdScope.done()
+
+	context 'mock services return valid responses, 1 match on untappd', ->
+		beforeEach (done) ->
+			@untappdScope.get(@searchUrl)
+				.replyWithFile(200, __dirname + '/replies/untappd/valid-search.json')
+			@untappdScope.get(@infoUrl)
+				.replyWithFile(200, __dirname + '/replies/untappd/valid-info.json')
+			setTimeout done, 100
+
+		it 'sends slack attachment including beerbods and untappd details', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot beerbods']
+			]
+
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			@attachment = require './expected/slack-untappd-attachment.json'
+			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
+
+	context 'mock services return valid responses, 2 matches on untappd', ->
+		beforeEach (done) ->
+			@untappdScope.get(@searchUrl)
+				.replyWithFile(200, __dirname + '/replies/untappd/search-with-more-than-one-result.json')
+			setTimeout done, 100
+
+		it 'sends slack attachment with untappd search link', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot beerbods']
+			]
+
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			@attachment = require './expected/slack-attachment.json'
+			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
+
+	context 'valid beerbods response, 1 untappd match without description', ->
+		beforeEach (done) ->
+			@untappdScope.get(@searchUrl)
+				.replyWithFile(200, __dirname + '/replies/untappd/valid-search.json')
+			@untappdScope.get(@infoUrl)
+				.replyWithFile(200, __dirname + '/replies/untappd/valid-info-no-description.json')
+			setTimeout done, 100
+
+		it 'sends slack attachment including beerbods and partial untappd details', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot beerbods']
+			]
+
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			@attachment = require './expected/slack-untappd-attachment-no-description.json'
+			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
+
+	context 'valid beerbods response, 1 untappd match with 1 rating, no abv', ->
+		beforeEach (done) ->
+			@untappdScope.get(@searchUrl)
+				.replyWithFile(200, __dirname + '/replies/untappd/valid-search.json')
+			@untappdScope.get(@infoUrl)
+				.replyWithFile(200, __dirname + '/replies/untappd/valid-info-one-rating-no-abv.json')
+			setTimeout done, 100
+
+		it 'sends slack attachment including beerbods and properly formatted untappd details', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot beerbods']
+			]
+
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			@attachment = require './expected/slack-untappd-attachment-one-rating-no-abv.json'
+			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 
 describe 'hubot-beerbods-unit', ->
 	context 'mock beerbods returns page with expected layout', ->
