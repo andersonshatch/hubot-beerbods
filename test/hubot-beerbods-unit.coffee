@@ -159,6 +159,23 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 			@attachment = require './expected/slack-untappd-attachment-one-rating-no-abv.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 
+	context 'valid beerbods and untappd search response, untappd details failure', ->
+		beforeEach (done) ->
+			@untappdScope.get(@searchUrl)
+				.replyWithFile(200, __dirname + '/replies/untappd/valid-search.json')
+			@untappdScope.get(@infoUrl)
+				.reply(404)
+			setTimeout done, 100
+
+		it 'sends slack attachment including beerbods and untappd search link', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot beerbods']
+			]
+
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			@attachment = require './expected/slack-attachment.json'
+			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
+
 describe 'hubot-beerbods-unit', ->
 	context 'mock beerbods returns page with expected layout', ->
 		beforeEach (done) ->
