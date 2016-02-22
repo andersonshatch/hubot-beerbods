@@ -84,9 +84,9 @@ module.exports = (robot) ->
 
 	searchBeerOnUntappd = (beerTitle, slackMessage, untappd) ->
 		robot.http("#{untappd.apiRoot}/search/beer?q=#{encodeURIComponent beerTitle}&limit=1&client_id=#{untappd.id}&client_secret=#{untappd.secret}")
-			.get() (err, res, body) ->
-				if err
-					robot.logger.error "beerbods-untappd-search", err
+			.get() (error, response, body) ->
+				if error or response.statusCode != 200
+					robot.logger.error "beerbods-untappd-search", error ||= response.statusCode + body
 					sendSlackMessage slackMessage
 					return
 				data = JSON.parse body
