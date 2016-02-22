@@ -100,9 +100,9 @@ module.exports = (robot) ->
 
 	lookupBeerOnUntappd = (untappdBeerId, slackMessage, untappd) ->
 		robot.http("#{untappd.apiRoot}/beer/info/#{untappdBeerId}?compact=true&client_id=#{untappd.id}&client_secret=#{untappd.secret}")
-			.get() (err, res, body) ->
-				if err
-					robot.logger.error "beerbods-untappd-beer-bid-#{untappdBeerId}", err
+			.get() (error, response, body) ->
+				if error or response.statusCode != 200
+					robot.logger.error "beerbods-untappd-beer-bid-#{untappdBeerId}", error ||= response.statusCode + body
 					sendSlackMessage slackMessage
 					return
 
