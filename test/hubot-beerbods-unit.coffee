@@ -162,19 +162,47 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 	context 'valid beerbods and untappd search response, untappd details failure', ->
 		beforeEach (done) ->
 			@untappdScope.get(@searchUrl)
+				.twice()
 				.replyWithFile(200, __dirname + '/replies/untappd/valid-search.json')
 			@untappdScope.get(@infoUrl)
 				.reply(404)
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.nockscope.interceptors[0].replyWithFile(200, __dirname + '/replies/valid.html') #repeat beerbods request
+			@untappdScope.get(@infoUrl)
+				.replyWithError('some http / socket error')
+			setTimeout done, 100
+
+		it 'sends slack attachment including beerbods and untappd search link', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot beerbods'],
+				['josh', 'hubot beerbods']
+			]
+
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 2
+			@attachment = require './expected/slack-attachment.json'
+			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
+			expect(GLOBAL.room.robot.slackMessages[1].attachments).to.eql @attachment
+
+	context 'valid beerbods, failure on untappd search response', ->
+		beforeEach (done) ->
+			@untappdScope.get(@searchUrl)
+				.reply(404)
+			GLOBAL.room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.nockscope.interceptors[0].replyWithFile(200, __dirname + '/replies/valid.html') #repeat beerbods request
+			@untappdScope.get(@searchUrl)
+				.replyWithError('some http / socket error')
 			setTimeout done, 100
 
 		it 'sends slack attachment including beerbods and untappd search link', ->
 			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
+				['josh', 'hubot beerbods']
 			]
 
-			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			expect(GLOBAL.room.robot.slackMessages).to.have.length 2
 			@attachment = require './expected/slack-attachment.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
+			expect(GLOBAL.room.robot.slackMessages[1].attachments).to.eql @attachment
 
 describe 'hubot-beerbods-unit', ->
 	context 'mock beerbods returns page with expected layout', ->
