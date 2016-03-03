@@ -90,7 +90,14 @@ module.exports = (robot) ->
 					sendSlackMessage slackMessage
 					return
 				data = JSON.parse body
-				if !data or data.response.found != 1
+				sendSlackMessage slackMessage unless data
+
+				beers = data.response.beers.items
+				if beers.length > 1
+					#More than one result, so filter out beers out of production which may reduce us to one remaining result
+					beers = (item for item in beers when item.beer.in_production)
+
+				if beers.length != 1
 					#Unsure which to pick, so bail and leave the search link
 					sendSlackMessage slackMessage
 					return
