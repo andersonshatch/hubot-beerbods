@@ -2,18 +2,26 @@
     "response": {
         "found": 2,
         "beers": {
-            "count": 1,
+            "count": 2,
             "items": [
                 {
                     "beer": {
-                        "bid": 481516
+                        "bid": 481516,
+                        "in_production": 1
                     }
-				},
-				{
-					"beer": {
-						"bid": 2342
-					}
-				}
+                },
+                {
+                    "beer": {
+                        "bid": 2342,
+                        "in_production": 1
+                    }
+                },
+                {
+                    "beer": {
+                        "bid": 815,
+                        "in_production": 1
+                    }
+                }
             ]
         }
     }

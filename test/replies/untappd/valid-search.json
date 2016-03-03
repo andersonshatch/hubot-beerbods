@@ -6,9 +6,10 @@
             "items": [
                 {
                     "beer": {
-                        "bid": 481516
+                        "bid": 481516,
+                        "in_production": 1
                     }
-				}
+                }
             ]
         }
     }
