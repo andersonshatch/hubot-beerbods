@@ -24,43 +24,45 @@ pluralize = require "pluralize"
 url = "https://beerbods.co.uk"
 untappdApiRoot = "https://api.untappd.com/v4"
 
+thisWeek = { path: "", beerDelta: 0, weekDescriptor: "This" }
+nextWeek = { path: "", beerDelta: 1, weekDescriptor: "Next" }
+
 module.exports = (robot) ->
-	robot.respond /(what('|’)?s? this week('|’)?s )?beerbods\??/i, (message) ->
+	setEnv = (message) ->
+		@disableSlackIdentityChange = if process.env.HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY == "true" then true else false
+		@untappdClientId = process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_ID
+		@untappdClientSecret = process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_SECRET
 
-		disableSlackIdentityChange = if process.env.HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY == "true" then true else false
-		untappdClientId = process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_ID
-		untappdClientSecret = process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_SECRET
-
-		message.http(url).get() (error, response, body) ->
+	lookupBeer = (message, settings) ->
+		message.http("#{url}#{settings.path}").get() (error, response, body) ->
 			if error
-				respondWithError message
+				respondWithError message, settings.weekDescriptor
 				robot.logger.error "beerbods", error
 				return
 			$ = cheerio.load body
 			div = $('div.beerofweek-container')
-			beerDelta = 0
-			beerTitle = $('h3', div).eq(beerDelta).text()
-			beerHref = $('a', div).eq(beerDelta).attr('href')
+			beerTitle = $('h3', div).eq(settings.beerDelta).text()
+			beerHref = $('a', div).eq(settings.beerDelta).attr('href')
 
 			if !beerTitle or !beerHref
-				respondWithError message
+				respondWithError message, settings.weekDescriptor
 				robot.logger.error "beerbods beer not found - page layout unexpected"
 				return
 
 			beerUrl = url + beerHref
 
-			text = "This week's beer is #{beerTitle} - #{beerUrl}"
+			text = "#{settings.weekDescriptor} week's beer is #{beerTitle} - #{beerUrl}"
 
 			if robot.adapterName == "slack"
 				slackMessage = {
-					username: "beerbods" unless disableSlackIdentityChange,
-					icon_emoji: ":beers:" unless disableSlackIdentityChange,
+					username: "beerbods" unless @disableSlackIdentityChange,
+					icon_emoji: ":beers:" unless @disableSlackIdentityChange,
 					message: message,
 					attachments: [{
-						pretext: "This week's beer:",
+						pretext: "#{settings.weekDescriptor} week's beer:",
 						title: beerTitle,
 						title_link: beerUrl,
-						image_url: url + $('img', div).eq(beerDelta).attr("src"),
+						image_url: url + $('img', div).eq(settings.beerDelta).attr("src"),
 						fallback: text
 						fields: [{
 							title: "Untappd",
@@ -69,15 +71,23 @@ module.exports = (robot) ->
 						}]
 					}]
 				}
-				if untappdClientId and untappdClientSecret
-					searchBeerOnUntappd beerTitle, slackMessage, {id: untappdClientId, secret: untappdClientSecret, apiRoot: untappdApiRoot}
+				if @untappdClientId and @untappdClientSecret
+					searchBeerOnUntappd beerTitle, slackMessage, {id: @untappdClientId, secret: @untappdClientSecret, apiRoot: untappdApiRoot}
 				else
 					sendSlackMessage slackMessage
 			else
 				message.send text
 
-	respondWithError = (message) ->
-		message.send "Sorry, there was an error finding this week's beer. Check #{url}"
+	robot.respond /(what('|’)?s? this week('|’)?s )?beerbods\??/i, (message) ->
+		setEnv message
+		lookupBeer message, thisWeek
+
+	robot.respond /what('|’)?s? next week('|’)?s beerbods\??/i, (message) ->
+		setEnv message
+		lookupBeer message, nextWeek
+
+	respondWithError = (message, weekDescriptor) ->
+		message.send "Sorry, there was an error finding #{weekDescriptor.toLowerCase()} week's beer. Check #{url}"
 
 	sendSlackMessage = (message) ->
 		robot.emit "slack-attachment", message
