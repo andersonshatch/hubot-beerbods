@@ -266,15 +266,34 @@ describe 'hubot-beerbods-unit', ->
 		beforeEach (done) ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
+				.twice()
 				.replyWithFile(200, __dirname + '/replies/invalid.html')
 			GLOBAL.room.user.say 'josh', 'hubot beerbods'
+			GLOBAL.room.user.say 'josh', 'hubot what\'s next week\'s beerbods?'
 			setTimeout done, 100
 
 		it 'responds with an apology', ->
 			expect(GLOBAL.room.messages).to.eql [
 				['josh', 'hubot beerbods']
+				['josh', 'hubot what\'s next week\'s beerbods?']
 				['hubot', 'Sorry, there was an error finding this week\'s beer. Check https://beerbods.co.uk']
+				['hubot', 'Sorry, there was an error finding next week\'s beer. Check https://beerbods.co.uk']
 			]
+
+	context 'mock beerbods valid for next weeks beer', ->
+		beforeEach (done) ->
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
+				.get("/")
+				.replyWithFile(200, __dirname + '/replies/valid.html')
+			GLOBAL.room.user.say 'josh', 'hubot what\'s next week\'s beerbods?'
+			setTimeout done, 100
+
+		it 'responds with next weeks beer', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot what\'s next week\'s beerbods?']
+				['hubot', 'Next week\'s beer is Dalrympley, Hikin - https://beerbods.co.uk/this-weeks-beer/dalrymple-hikin']
+			]
+
 
 	context 'mock beerbods site unavailable', ->
 		beforeEach (done) ->
