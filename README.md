@@ -6,6 +6,12 @@ A [beerbods](https://beerbods.co.uk) script for [Hubot](https://hubot.github.com
 ```
 Joe: hubot beerbods
 Hubot: This week's beer is Little Beer Corporation, Little Wild - https://beerbods.co.uk/this-weeks-beer
+
+John: hubot what was last week's beerbods?
+Hubot: Last week's beer was Thornbridge Brewery, Kill your Darlings - https://beerbods.co.uk/last-weeks-beer
+
+Josh: hubot what's next week's beerbods?
+Hubot: Next week's beer is Drygate, Axman IPA - https://beerbods.co.uk/next-weeks-beer
 ```
 ![Preview in irc/xmpp](./img/nonslack.png?raw=true)
 If you're using Slack, you'll be treated to a picture of the beer and a link to search for it on [Untappd](http://untappd.com).
