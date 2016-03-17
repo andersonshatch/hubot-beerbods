@@ -262,7 +262,7 @@ describe 'hubot-beerbods-unit', ->
 				response
 			]
 
-	context 'mock beerbods returns modified page layout', ->
+	context 'mock beerbods returns modified homepage layout', ->
 		beforeEach (done) ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
 				.get("/")
@@ -280,6 +280,24 @@ describe 'hubot-beerbods-unit', ->
 				['hubot', 'Sorry, there was an error finding next week\'s beer. Check https://beerbods.co.uk']
 			]
 
+	context 'mock beerbods returns modified archive layout', ->
+		beforeEach (done) ->
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
+				.get("/archive")
+				.twice()
+				.replyWithFile(200, __dirname + '/replies/invalid.html')
+			GLOBAL.room.user.say 'josh', 'hubot what was last week\'s beerbods?'
+			GLOBAL.room.user.say 'josh', 'hubot what\'s last week\'s beerbods?'
+			setTimeout done, 100
+
+		it 'responds with an apology', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot what was last week\'s beerbods?']
+				['josh', 'hubot what\'s last week\'s beerbods?']
+				['hubot', 'Sorry, there was an error finding last week\'s beer. Check https://beerbods.co.uk/archive']
+				['hubot', 'Sorry, there was an error finding last week\'s beer. Check https://beerbods.co.uk/archive']
+			]
+
 	context 'mock beerbods valid for next weeks beer', ->
 		beforeEach (done) ->
 			GLOBAL.nockscope = nock("https://beerbods.co.uk")
@@ -294,6 +312,19 @@ describe 'hubot-beerbods-unit', ->
 				['hubot', 'Next week\'s beer is Dalrympley, Hikin - https://beerbods.co.uk/this-weeks-beer/dalrymple-hikin']
 			]
 
+	context 'mock beerbods valid for last weeks beer', ->
+		beforeEach (done) ->
+			GLOBAL.nockscope = nock("https://beerbods.co.uk")
+				.get("/archive")
+				.replyWithFile(200, __dirname + '/replies/valid.html')
+			GLOBAL.room.user.say 'josh', 'hubot what\'s last week\'s beerbods?'
+			setTimeout done, 100
+
+		it 'responds with last weeks beer', ->
+			expect(GLOBAL.room.messages).to.eql [
+				['josh', 'hubot what\'s last week\'s beerbods?']
+				['hubot', 'Last week\'s beer was Beer?, The Dharma Initiative - https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative']
+			]
 
 	context 'mock beerbods site unavailable', ->
 		beforeEach (done) ->
