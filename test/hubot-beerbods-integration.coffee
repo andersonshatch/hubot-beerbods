@@ -45,3 +45,16 @@ describe 'hubot-beerbods-integration', ->
 			expect(@room.messages).to.have.length 2
 			expect(@room.messages[1]).to.match /This week's beer is .* https:\/\/beerbods.co.uk\/.*/
 
+describe 'hubot-beerbods-integration-archive', ->
+	beforeEach ->
+		@room = helper.createRoom(httpd: false)
+
+	context 'actual beerbods returns archive page with expected layout', ->
+		beforeEach (done) ->
+			@room.user.say 'josh', 'hubot what was last week\'s beerbods?'
+			setTimeout done, 1500
+
+		it 'replies with last week\'s beer', ->
+			expect(@room.messages).to.have.length 2
+			expect(@room.messages[1]).to.match /Last week's beer was .* https:\/\/beerbods.co.uk\/.*/
+
