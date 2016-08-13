@@ -23,6 +23,10 @@
     "humanize": "0.0.9",
     "pluralize": "1.2.1"
   },
+  "peerDependencies": {
+    "hubot": "2.x",
+    "hubot-slack": "3.x"
+  },
   "main": "index.coffee",
   "homepage": "https://github.com/andersonshatch/hubot-beerbods#readme",
   "scripts": {
