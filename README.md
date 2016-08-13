@@ -29,5 +29,5 @@ this can be disabled (mainly useful for XMPP/IRC bridges) by setting this to tru
 * `HUBOT_BEERBODS_UNTAPPD_CLIENT_SECRET` - optional, see `HUBOT_BEERBODS_UNTAPPD_CLIENT_ID`
 
 Not using Slack? There's no configuration, and it's fine to ignore the npm warning:
->npm WARN hubot-beerbods@<version> requires a peer of hubot-slack@<version> but none was installed
+>npm WARN hubot-beerbods@\<version\> requires a peer of hubot-slack@\<version\> but none was installed
 
