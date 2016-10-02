@@ -102,7 +102,7 @@ module.exports = (robot) ->
 		robot.emit "slack-attachment", message
 
 	searchBeerOnUntappd = (beerTitle, slackMessage, untappd) ->
-		robot.http("#{untappd.apiRoot}/search/beer?q=#{encodeURIComponent beerTitle}&limit=1&client_id=#{untappd.id}&client_secret=#{untappd.secret}")
+		robot.http("#{untappd.apiRoot}/search/beer?q=#{encodeURIComponent beerTitle}&limit=5&client_id=#{untappd.id}&client_secret=#{untappd.secret}")
 			.get() (error, response, body) ->
 				if error or response.statusCode != 200
 					robot.logger.error "beerbods-untappd-search", error ||= response.statusCode + body

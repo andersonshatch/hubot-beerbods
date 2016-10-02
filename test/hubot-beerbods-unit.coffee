@@ -81,7 +81,7 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 		process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_ID = 'not-real-id'
 		process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_SECRET = 'not-real-secret'
 		@untappdScope = nock("https://api.untappd.com")
-		@searchUrl = "/v4/search/beer?q=#{encodeURIComponent 'Beer?, The Dharma Initiative'}&limit=1&client_id=not-real-id&client_secret=not-real-secret"
+		@searchUrl = "/v4/search/beer?q=#{encodeURIComponent 'Beer?, The Dharma Initiative'}&limit=5&client_id=not-real-id&client_secret=not-real-secret"
 		@infoUrl = '/v4/beer/info/481516?compact=true&client_id=not-real-id&client_secret=not-real-secret'
 		GLOBAL.room.user.say 'josh', 'hubot beerbods'
 		GLOBAL.nockscope = nock("https://beerbods.co.uk")
