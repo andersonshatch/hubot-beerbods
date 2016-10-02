@@ -1,7 +1,7 @@
 {
   "name": "hubot-beerbods",
   "description": "A beerbods script for Hubot",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": "Josh Anderson",
   "license": "MIT",
   "keywords": [
