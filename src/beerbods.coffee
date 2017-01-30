@@ -51,6 +51,9 @@ module.exports = (robot) ->
 		@untappdClientSecret = process.env.HUBOT_BEERBODS_UNTAPPD_CLIENT_SECRET
 
 	lookupBeer = (message, config) ->
+		#Send a typing notification (slack v4 adapter only)
+		robot.adapter?.client?.rtm?.sendTyping(message.message.room)
+
 		message.http("#{url}#{config.path}").get() (error, response, body) ->
 			if error
 				respondWithError message, config
