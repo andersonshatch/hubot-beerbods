@@ -74,6 +74,7 @@ module.exports = (robot) ->
 				slackMessage = {
 					username: "beerbods" unless @disableSlackIdentityChange,
 					icon_emoji: ":beers:" unless @disableSlackIdentityChange,
+					as_user: false,
 					message: message,
 					attachments: [{
 						pretext: "#{config.weekDescriptor} week's beer:",
@@ -99,7 +100,14 @@ module.exports = (robot) ->
 		message.send "Sorry, there was an error finding #{config.weekDescriptor.toLowerCase()} week's beer. Check #{url}#{config.path}"
 
 	sendSlackMessage = (message) ->
+		#For slack-adapter version 3.x:
 		robot.emit "slack-attachment", message
+
+		#For slack-adapter version 4.x:
+		msg = message.message
+		delete message.message
+		delete message.text
+		msg.send message
 
 	searchBeerOnUntappd = (beerTitle, slackMessage, untappd) ->
 		robot.http("#{untappd.apiRoot}/search/beer?q=#{encodeURIComponent beerTitle}&limit=5&client_id=#{untappd.id}&client_secret=#{untappd.secret}")
