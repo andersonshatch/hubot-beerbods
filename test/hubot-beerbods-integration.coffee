@@ -17,11 +17,12 @@ describe 'hubot-beerbods-integration-slack', ->
 			setTimeout done, 1500
 
 		it 'doesn\'t reply with a normal message, sends slack attachment', ->
-			expect(@room.messages).to.eql [
-				['josh', 'hubot beerbods']
-			]
+			expect(@room.messages[0]).to.eql ['josh', 'hubot beerbods']
 
 			expect(@room.robot.slackMessages).to.have.length 1
+			#Slack message will be emitted as a slack-attachment for the v3.x adapter, as a message object for v4.x
+			#... check that they are both the same as we expect
+			expect(@room.robot.slackMessages[0]).to.eql @room.messages[1][1]
 			message = @room.robot.slackMessages[0].attachments[0]
 			expect(message.pretext).to.eql 'This week\'s beer:'
 			expect(message.title).to.be.defined

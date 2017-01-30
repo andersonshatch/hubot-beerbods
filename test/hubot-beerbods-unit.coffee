@@ -31,11 +31,12 @@ describe 'hubot-beerbods-slack-unit', ->
 			setTimeout done, 100
 
 		it 'doesn\'t reply with a normal message, sends slack attachment as beerbods', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			#Slack message will be emitted as a slack-attachment for the v3.x adapter, as a message object for v4.x
+			#... check that they are both the same as we expect
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[1][1]
 			message = GLOBAL.room.robot.slackMessages[0]
 			expect(message.username).to.eql "beerbods"
 			expect(message.icon_emoji).to.eql ":beers:"
@@ -66,11 +67,10 @@ describe 'hubot-beerbods-slack-unit', ->
 			setTimeout done, 100
 
 		it 'doesn\'t reply with a normal message, sends slack attachment as hubot', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[1][1]
 			message = GLOBAL.room.robot.slackMessages[0]
 			expect(message.username).to.be.undefined
 			expect(message.icon_imoji).to.be.undefined
@@ -102,11 +102,10 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 			setTimeout done, 100
 
 		it 'sends slack attachment including beerbods and untappd details', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[1][1]
 			@attachment = require './expected/slack-untappd-attachment.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 
@@ -117,11 +116,10 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 			setTimeout done, 100
 
 		it 'sends slack attachment with untappd search link', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[1][1]
 			@attachment = require './expected/slack-attachment.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 
@@ -134,11 +132,10 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 			setTimeout done, 100
 
 		it 'sends slack attachment including beerbods and untappd details', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[1][1]
 			@attachment = require './expected/slack-untappd-attachment.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 
@@ -151,11 +148,10 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 			setTimeout done, 100
 
 		it 'sends slack attachment including beerbods and partial untappd details', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[1][1]
 			@attachment = require './expected/slack-untappd-attachment-no-description.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 
@@ -168,11 +164,10 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 			setTimeout done, 100
 
 		it 'sends slack attachment including beerbods and properly formatted untappd details', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 1
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[1][1]
 			@attachment = require './expected/slack-untappd-attachment-one-rating-no-abv.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 
@@ -190,12 +185,12 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 			setTimeout done, 100
 
 		it 'sends slack attachment including beerbods and untappd search link', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods'],
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
+			expect(GLOBAL.room.messages[1]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 2
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[2][1]
+			expect(GLOBAL.room.robot.slackMessages[1]).to.eql GLOBAL.room.messages[3][1]
 			@attachment = require './expected/slack-attachment.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 			expect(GLOBAL.room.robot.slackMessages[1].attachments).to.eql @attachment
@@ -211,12 +206,12 @@ describe 'hubot-beerbods-slack-untappd-unit', ->
 			setTimeout done, 100
 
 		it 'sends slack attachment including beerbods and untappd search link', ->
-			expect(GLOBAL.room.messages).to.eql [
-				['josh', 'hubot beerbods']
-				['josh', 'hubot beerbods']
-			]
+			expect(GLOBAL.room.messages[0]).to.eql ['josh', 'hubot beerbods']
+			expect(GLOBAL.room.messages[1]).to.eql ['josh', 'hubot beerbods']
 
 			expect(GLOBAL.room.robot.slackMessages).to.have.length 2
+			expect(GLOBAL.room.robot.slackMessages[0]).to.eql GLOBAL.room.messages[2][1]
+			expect(GLOBAL.room.robot.slackMessages[1]).to.eql GLOBAL.room.messages[3][1]
 			@attachment = require './expected/slack-attachment.json'
 			expect(GLOBAL.room.robot.slackMessages[0].attachments).to.eql @attachment
 			expect(GLOBAL.room.robot.slackMessages[1].attachments).to.eql @attachment
