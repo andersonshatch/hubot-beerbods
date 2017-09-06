@@ -1,14 +1,13 @@
 # Description:
-#   Have hubot tell you about this week's beerbods
+#   Have hubot tell you about BeerBods beers
 #
 # Configuration:
 #    HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY (optional, when true disables overriding username and image with slack adapter)
-#    HUBOT_BEERBODS_UNTAPPD_CLIENT_ID (optional, Untappd API will be used to show beer rating -- slack adapter only)
-#    HUBOT_BEERBODS_UNTAPPD_CLIENT_SECRET (optional, see HUBOT_BEERBODS_UNTAPPD_CLIENT_ID)
 #
 # Commands:
 #    hubot beerbods - Find out what beer is this week's beerbods
-#    hubot what's <last|next> week's beerbods - Find previous / next beerbods beer
+#    beerbods <-4,-3,-2,-1,+1,+2,+3> - Find out what beers are up to 4 weeks ago (-4), and up to 3 weeks ahead (+3)
+#    what's <last|next> week's beerbods - Find previous / next beerbods beer
 #
 # Authors:
 #    andersonshatch
