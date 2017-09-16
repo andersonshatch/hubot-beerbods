@@ -85,7 +85,7 @@ module.exports = (robot) ->
 					includeImage = index == data.beers.length - 1
 					pretext = if index == 0 then data.pretext else "…and/or:"
 					if beer.untappd.detailUrl
-						footer = "Checkin on <#{beer.untappd.detailUrl}|Untappd.com> / <#{beer.untappd.mobileDeepUrl}|Untappd App>"
+						footer = "Check-in on <#{beer.untappd.detailUrl}|Untappd.com> / <#{beer.untappd.mobileDeepUrl}|Untappd App>"
 					else
 						footer = "Search on <#{beer.untappd.searchUrl}|Untappd.com>"
 					response = {
