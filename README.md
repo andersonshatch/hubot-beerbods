@@ -3,6 +3,8 @@
 
 A [beerbods](https://beerbods.co.uk) script for [Hubot](https://hubot.github.com)
 
+Now also available as a [Slack app](https://beerbods.andersonshatch.com/slack.html) (slash command)
+
 ```
 Joe: hubot beerbods
 Hubot: This week's beer is Little Beer Corporation, Little Wild - https://beerbods.co.uk/this-weeks-beer
