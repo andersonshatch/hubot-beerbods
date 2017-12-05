@@ -74,11 +74,14 @@ module.exports = (robot) ->
 
 			if robot.adapterName == "slack"
 				slackMessage = {
-					username: "beerbods" unless @disableSlackIdentityChange,
-					icon_url: "https://beerbods.co.uk/images/favicon.ico" unless @disableSlackIdentityChange,
-					as_user: false,
 					message: message
 				}
+				if !@disableSlackIdentityChange
+					slackMessage.username = "beerbods"
+					slackMessage.icon_url = "https://beerbods.co.uk/images/favicon.ico"
+					slackMessage.as_user = false
+				else
+					slackMessage.as_user = true
 
 				attachments = []
 				for beer, index in data.beers
