@@ -1,0 +1,31 @@
+[
+   {
+      "author_icon": "https://untappd.com/dharma.png",
+      "author_link": "https://untappd.com/w/dharma-initiative/4815162342",
+      "author_name": "Beer?",
+      "pretext" : "This week's test beer shall be:",
+      "title" : "The Dharma Initiative - BeerBods",
+      "title_link" : "https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative",
+      "fields" : [
+         {
+            "short": true,
+            "title": "Style",
+            "value": "BEER"
+         },
+         {
+            "short": true,
+            "title": "ABV / Rating",
+            "value": "5% / 4.82 avg, 108 ratings"
+         },
+         {
+            "title": "Description",
+            "value": "Don't tell us what we can't brew"
+         }
+      ],
+      "footer": "Check-in on <https://untappd.com/b/dharma-initiative-beer/481516|Untappd.com> / <https://untappd.com/qr/beer/481516|Untappd App>",
+      "footer_icon": "https://untappd.akamaized.net/assets/favicon-16x16.png",
+      "fallback" : "This week's test beer shall be: Beer? The Dharma Initiative https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative",
+      "image_url" : "https://beerbods.co.uk/media/108/bottle.png"
+   }
+]
+

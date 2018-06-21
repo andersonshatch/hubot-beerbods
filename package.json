@@ -18,7 +18,9 @@
   "bugs": {
     "url": "https://github.com/andersonshatch/hubot-beerbods/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "coffeescript": "2.x"
+  },
   "peerDependencies": {
     "hubot": "2.x",
     "hubot-slack": "3.x - 4.x"
@@ -26,9 +28,12 @@
   "main": "index.coffee",
   "homepage": "https://github.com/andersonshatch/hubot-beerbods#readme",
   "scripts": {
-    "test": "echo 'no tests :('"
+    "test": "mocha --require coffeescript/register test/*.coffee"
   },
   "devDependencies": {
-    "coffee-script": "^1.10.0"
+    "chai": "^4.1.2",
+    "hubot-test-helper": "^1.9.0",
+    "mocha": "^5.2.0",
+    "nock": "^9.3.3"
   }
 }

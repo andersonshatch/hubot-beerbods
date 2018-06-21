@@ -1,0 +1,21 @@
+{
+  "pretext": "Next week's test beer shall be:",
+  "beerbodsCaption": "Dalrympley, Hikin",
+  "beerbodsUrl": "https://beerbods.co.uk/this-weeks-beer/dalrymple-hikin",
+  "summary": "Next week's test beer shall be Dalrympley, Hikin",
+  "beerbodsImageUrl": "https://beerbods.co.uk/media/1864/bottle.png",
+  "beers": [
+    {
+      "brewery": {
+        "name": "Dalrympley"
+      },
+      "name": "Hikin",
+      "untappd": {
+        "lookupSuccessful": false,
+        "match": "auto",
+        "searchTerm": "Dalrympley Hikin",
+        "searchUrl": "https://untappd.com/search?q=Dalrympley%20Hikin"
+      }
+    }
+  ]
+}
