@@ -19,7 +19,7 @@
     "url": "https://github.com/andersonshatch/hubot-beerbods/issues"
   },
   "dependencies": {
-    "coffeescript": "1.x"
+    "coffeescript": "2.x"
   },
   "peerDependencies": {
     "hubot": "2.x",
