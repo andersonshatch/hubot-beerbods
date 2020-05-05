@@ -10,6 +10,10 @@
         "name": "Dalrympley"
       },
       "name": "Hikin",
+	  "beerbodsUrl": "https://beerbods.co.uk/this-weeks-beer/dalrymple-hikin",
+	  "images": [
+		  "https://beerbods.co.uk/media/1864/bottle.png"
+	  ],
       "untappd": {
         "lookupSuccessful": false,
         "match": "auto",

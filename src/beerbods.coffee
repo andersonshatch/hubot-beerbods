@@ -85,7 +85,6 @@ module.exports = (robot) ->
 
 				attachments = []
 				for beer, index in data.beers
-					includeImage = index == data.beers.length - 1
 					pretext = if index == 0 then data.pretext else "…and/or:"
 					if beer.untappd.detailUrl
 						footer = "Check-in on <#{beer.untappd.detailUrl}|Untappd.com> / <#{beer.untappd.mobileDeepUrl}|Untappd App>"
@@ -94,8 +93,8 @@ module.exports = (robot) ->
 					response = {
 						pretext: pretext
 						title: "#{beer.name} - BeerBods"
-						title_link: data.beerbodsUrl
-						image_url: data.beerbodsImageUrl unless !includeImage,
+						title_link: beer.beerbodsUrl,
+						image_url: beer.images[0],
 						fallback: "#{pretext} #{beer.brewery.name} #{beer.name} #{data.beerbodsUrl}"
 						author_name: beer.brewery.name,
 						author_link: beer.brewery.url,

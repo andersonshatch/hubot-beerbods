@@ -12,6 +12,10 @@
         "url": "https://untappd.com/w/dharma-initiative/4815162342"
       },
       "name": "The Dharma Initiative",
+	  "beerbodsUrl": "https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative",
+	  "images": [
+		  "https://beerbods.co.uk/media/108/bottle.png"
+	  ],
       "untappd": {
         "lookupSuccessful": true,
         "lookupStale": false,
