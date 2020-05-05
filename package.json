@@ -22,7 +22,7 @@
     "coffeescript": "1.x"
   },
   "peerDependencies": {
-    "hubot": "2.x",
+    "hubot": "2.x - 3.x",
     "hubot-slack": "3.x - 4.x"
   },
   "main": "index.coffee",
