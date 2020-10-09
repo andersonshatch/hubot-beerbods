@@ -50,6 +50,53 @@ module.exports = (robot) ->
 	setEnv = () ->
 		@disableSlackIdentityChange = if process.env.HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY == "true" then true else false
 
+
+	formatMessage = (beers, pretext) ->
+		attachments = []
+		for beer, index in beers
+			pretext = if index == 0 then pretext else "…and/or:"
+			if beer.untappd.detailUrl
+				footer = "Check-in on <#{beer.untappd.detailUrl}|Untappd.com> / <#{beer.untappd.mobileDeepUrl}|Untappd App>"
+			else
+				footer = "Search on <#{beer.untappd.searchUrl}|Untappd.com>"
+			response = {
+				pretext: pretext
+				title: "#{beer.name} - BeerBods"
+				title_link: beer.beerbodsUrl,
+				image_url: beer.images[0],
+				fallback: "#{pretext} #{beer.brewery.name} #{beer.name} #{beer.beerbodsUrl}"
+				author_name: beer.brewery.name,
+				author_link: beer.brewery.url,
+				author_icon: beer.brewery.logo,
+				fields: [],
+				footer: footer,
+				footer_icon: "https://untappd.akamaized.net/assets/favicon-16x16.png"
+			}
+
+			if beer.untappd.style
+				response.fields.push {
+					title: "Style",
+					value: beer.untappd.style,
+					short: true
+				}
+
+			if beer.untappd.abv and beer.untappd.rating
+				response.fields.push {
+					title: "ABV / Rating",
+					value: "#{beer.untappd.abv} / #{beer.untappd.rating}",
+					short: true
+				}
+
+			if beer.untappd.description
+				response.fields.push {
+					title: "Description",
+					value: beer.untappd.description
+				}
+
+			attachments.push response
+		return attachments
+
+
 	lookupBeer = (message, config) ->
 		#Send a typing notification (slack v4 adapter only)
 		robot.adapter?.client?.rtm?.sendTyping(message.message.room)
@@ -83,48 +130,9 @@ module.exports = (robot) ->
 				else
 					slackMessage.as_user = true
 
-				attachments = []
-				for beer, index in data.beers
-					pretext = if index == 0 then data.pretext else "…and/or:"
-					if beer.untappd.detailUrl
-						footer = "Check-in on <#{beer.untappd.detailUrl}|Untappd.com> / <#{beer.untappd.mobileDeepUrl}|Untappd App>"
-					else
-						footer = "Search on <#{beer.untappd.searchUrl}|Untappd.com>"
-					response = {
-						pretext: pretext
-						title: "#{beer.name} - BeerBods"
-						title_link: beer.beerbodsUrl,
-						image_url: beer.images[0],
-						fallback: "#{pretext} #{beer.brewery.name} #{beer.name} #{data.beerbodsUrl}"
-						author_name: beer.brewery.name,
-						author_link: beer.brewery.url,
-						author_icon: beer.brewery.logo,
-						fields: [],
-						footer: footer,
-						footer_icon: "https://untappd.akamaized.net/assets/favicon-16x16.png"
-					}
-
-					if beer.untappd.style
-						response.fields.push {
-							title: "Style",
-							value: beer.untappd.style,
-							short: true
-						}
-
-					if beer.untappd.abv and beer.untappd.rating
-						response.fields.push {
-							title: "ABV / Rating",
-							value: "#{beer.untappd.abv} / #{beer.untappd.rating}",
-							short: true
-						}
-
-					if beer.untappd.description
-						response.fields.push {
-							title: "Description",
-							value: beer.untappd.description
-						}
-
-					attachments.push response
+				attachments = formatMessage(data.beers, data.pretext)
+				if data.plusBeers and Array.isArray(data.plusBeers) and data.plusBeers.length > 0
+					message.plusAttachments = formatMessage(data.plusBeers, data.plusPretext)
 
 				slackMessage.attachments = attachments
 				sendSlackMessage slackMessage
@@ -142,5 +150,15 @@ module.exports = (robot) ->
 		msg = message.message
 		delete message.message
 		delete message.text
-		msg.send message
-
+		plusAttachments = msg.plusAttachments
+		msg.send message, (error, slackResponse) ->
+			if plusAttachments
+				message.thread_ts = slackResponse[0].ts unless message.thread_ts #send plus beers threaded to the week's main beer if not already in a thread
+				message.attachments = plusAttachments
+				success = false
+				tryCount = 0
+				handle = setInterval () ->
+					clearInterval handle if success or tryCount++ > 2
+					msg.send message, (error, slackResponse) ->
+						success = true
+				, 1500
