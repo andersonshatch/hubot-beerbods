@@ -18,7 +18,7 @@
          }
       ],
       "footer": "Check-in on <https://untappd.com/b/dharma-initiative-beer/481516|Untappd.com> / <https://untappd.com/qr/beer/481516|Untappd App>",
-      "footer_icon": "https://untappd.akamaized.net/assets/favicon-16x16.png",
+      "footer_icon": "https://untappd.akamaized.net/assets/favicon-16x16-v2.png",
       "fallback" : "This week's test beer shall be: Beer? The Dharma Initiative https://beerbods.co.uk/this-weeks-beer/beer-dharma-initiative",
       "image_url" : "https://beerbods.co.uk/media/108/bottle.png"
    }

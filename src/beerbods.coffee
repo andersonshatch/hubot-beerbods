@@ -72,7 +72,7 @@ module.exports = (robot) ->
 				author_icon: beer.brewery.logo,
 				fields: [],
 				footer: footer,
-				footer_icon: "https://untappd.akamaized.net/assets/favicon-16x16.png"
+				footer_icon: "https://untappd.akamaized.net/assets/favicon-16x16-v2.png"
 			}
 
 			if beer.untappd.style
