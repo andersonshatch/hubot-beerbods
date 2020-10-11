@@ -3,6 +3,7 @@
 #
 # Configuration:
 #    HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY (optional, when true disables overriding username and image with slack adapter)
+#    HUBOT_DISABLE_BEERBODS_PLUS (optional, when true disables beerbods plus reply with slack adapter)
 #
 # Commands:
 #    hubot beerbods - Find out what beer is this week's beerbods
@@ -49,6 +50,7 @@ module.exports = (robot) ->
 
 	setEnv = () ->
 		@disableSlackIdentityChange = if process.env.HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY == "true" then true else false
+		@disableSlackBeerbodsPlus = if process.env.HUBOT_DISABLE_BEERBODS_PLUS == "true" then true else false
 
 
 	formatMessage = (beers, pretext) ->
@@ -131,7 +133,7 @@ module.exports = (robot) ->
 					slackMessage.as_user = true
 
 				attachments = formatMessage(data.beers, data.pretext)
-				if data.plusBeers and Array.isArray(data.plusBeers) and data.plusBeers.length > 0
+				if !@disableSlackBeerbodsPlus and data.plusBeers and Array.isArray(data.plusBeers) and data.plusBeers.length > 0
 					message.plusAttachments = formatMessage(data.plusBeers, data.plusPretext)
 
 				slackMessage.attachments = attachments
