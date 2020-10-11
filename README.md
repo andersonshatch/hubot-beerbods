@@ -26,6 +26,7 @@ When used with Slack, the following environment variables offer configuration:
 
 * `HUBOT_DISABLE_BEERBODS_CUSTOM_IDENTITY` - The script will, by default, override the username of hubot to 'beerbods' and set the image to :beers:,
 this can be disabled (mainly useful for XMPP/IRC bridges) by setting this to true
+* `HUBOT_DISABLE_BEERBODS_PLUS` - The script will, by default, send the week's Beerbods Plus beer (if there is one) in a threaded reply to the main beer of the week, this can be disabled by setting this to true
 
 Not using Slack? There's no configuration, and it's fine to ignore the npm warning:
 >npm WARN hubot-beerbods@\<version\> requires a peer of hubot-slack@\<version\> but none was installed
