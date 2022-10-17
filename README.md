@@ -1,9 +1,8 @@
 # Hubot Beerbods
-[![Build Status](https://travis-ci.org/andersonshatch/hubot-beerbods.svg?branch=master)](https://travis-ci.org/andersonshatch/hubot-beerbods)
 
-A [beerbods](https://beerbods.co.uk) script for [Hubot](https://hubot.github.com)
+This used to be a [beerbods](https://beerbods.co.uk) script for [Hubot](https://hubot.github.com), until beerbods closed down.
+This project is now retired.
 
-Now also available as a [Slack app](https://beerbods.andersonshatch.com/slack.html) (slash command)
 
 ```
 Joe: hubot beerbods
